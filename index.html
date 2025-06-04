@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Bust A Nut AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F59E42">
+  <link rel="icon" href="https://em-content.zobj.net/source/microsoft-teams/363/peanuts_1f95c.png">
   <style>
     :root {
       --main-bg: #181f2a;
@@ -25,6 +27,7 @@
       --code-btn-bg: #C87900;
       --code-btn-bg-hover: #F59E42;
       --code-btn-color: #ffe6ce;
+      --emoji-font: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
     }
     html, body {
       height: 100%;
@@ -32,7 +35,7 @@
       padding: 0;
       background: linear-gradient(135deg, #1b2336 0%, #463710 100%);
       min-height: 100vh;
-      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      font-family: 'Inter', 'Segoe UI', Arial, var(--emoji-font);
       color: #ffe6ce;
     }
     #chat-container {
@@ -49,6 +52,60 @@
       display: flex;
       flex-direction: column;
     }
+    #user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px 0 20px;
+      background: transparent;
+      font-size: 1.15em;
+    }
+    #profile-avatar {
+      width: 36px;
+      height: 36px;
+      font-size: 1.5em;
+      border-radius: 50%;
+      border: 2px solid #cfa977;
+      background: #232d44;
+      text-align: center;
+      line-height: 36px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #profile-nickname {
+      font-weight: bold;
+      min-width: 60px;
+      color: #ffe6ce;
+    }
+    #edit-nickname {
+      background: none;
+      border: none;
+      color: #F59E42;
+      font-size: 1em;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    #avatar-picker, #nickname-input {
+      display: none;
+      margin-top: 4px;
+      font-size: 1em;
+    }
+    #avatar-picker span {
+      cursor: pointer;
+      margin: 0 3px;
+      font-size: 1.2em;
+      transition: transform 0.1s;
+    }
+    #avatar-picker span:hover {
+      transform: scale(1.3);
+    }
+    #nickname-input {
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #cfa977;
+      background: #222b3a;
+      color: #ffe6ce;
+    }
     #chat-header {
       background: var(--primary);
       color: #fff;
@@ -62,6 +119,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.3em;
+      font-family: inherit;
     }
     #chat-header .subtitle {
       font-size: 1.01rem;
@@ -70,6 +128,7 @@
       opacity: 0.86;
       letter-spacing: 0.02em;
       margin-top: 0.19em;
+      font-family: inherit;
     }
     #chat-history {
       flex: 1;
@@ -99,12 +158,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35em;
+      font-size: 1.45em;
       margin-bottom: 4px;
       box-shadow: 0 2px 8px 0 rgba(76,100,200,0.10);
       border: 1.5px solid var(--border);
       transition: border 0.2s;
       user-select: none;
+      font-family: var(--emoji-font);
     }
     .avatar.user {
       background: linear-gradient(135deg, #F59E42 0%, #C87900 100%);
@@ -127,6 +187,7 @@
       font-size: 1.05rem;
       box-shadow: 0 2px 5px 0 rgba(44,60,97,0.09);
       transition: background 0.2s, color 0.2s;
+      font-family: inherit;
     }
     .msg.user {
       background: linear-gradient(120deg,var(--user-bg) 70%,var(--primary-dark) 100%);
@@ -162,6 +223,7 @@
       background: #232b44;
       color: #ffe6ce;
       transition: border 0.2s;
+      font-family: inherit;
     }
     #user-input:focus {
       border: 1.5px solid var(--primary);
@@ -178,6 +240,7 @@
       cursor: pointer;
       box-shadow: 0 2px 10px 0 rgba(245,158,66,0.12);
       transition: background 0.2s, box-shadow 0.2s;
+      font-family: inherit;
     }
     #send-btn:disabled {
       background: #444e60;
@@ -221,12 +284,14 @@
       align-items: center;
       gap: 7px;
       transition: opacity 0.22s;
+      font-family: var(--emoji-font), inherit;
     }
     #ai-thinking .emoji {
       font-size: 1.2em;
       margin-right: 3px;
       animation: spin 1.2s linear infinite;
       display: inline-block;
+      font-family: var(--emoji-font);
     }
     @keyframes spin {
       0% { transform: rotate(-20deg);}
@@ -283,6 +348,7 @@
       cursor: pointer;
       transition: background 0.14s,color 0.14s;
       opacity: 0.86;
+      font-family: inherit;
     }
     .code-ai-btn:hover {
       background: var(--code-btn-bg-hover);
@@ -307,12 +373,25 @@
       color: var(--code-btn-color);
       margin: 0 1.5px;
     }
+    .msg.bot :is(b, i, em, strong), .msg.bot .emoji {
+      font-family: var(--emoji-font), inherit;
+    }
+    .msg.bot .emoji {
+      font-size: 1.08em;
+      vertical-align: -0.2em;
+      margin: 0 2px;
+      user-select: none;
+    }
     @media (max-width: 600px) {
       #chat-container {
         max-width: 100vw;
         min-height: 100vh;
         margin: 0;
         border-radius: 0 0 18px 18px;
+      }
+      #user-profile {
+        padding: 6px 6px 0 8px;
+        font-size: 1em;
       }
       #chat-header {
         font-size: 1.3rem;
@@ -354,9 +433,18 @@
 </head>
 <body>
   <div id="chat-container">
+    <div id="user-profile">
+      <div id="profile-avatar" title="Click to change avatar">🥸</div>
+      <span id="profile-nickname">Player</span>
+      <button id="edit-nickname" title="Edit nickname">✏️</button>
+      <div id="avatar-picker">
+        <span>🥸</span><span>😎</span><span>👾</span><span>🧑‍💻</span><span>🐿️</span><span>🐉</span>
+      </div>
+      <input id="nickname-input" maxlength="16" />
+    </div>
     <div id="chat-header">
       <span>🥜 Bust A Nut AI</span>
-      <span class="subtitle">The nuttiest AI chatbot for code and conversation!</span>
+      <span class="subtitle">Your casual coder/gamer AI assistant</span>
     </div>
     <div id="chat-history" aria-live="polite"></div>
     <div id="ai-thinking" aria-live="assertive"></div>
@@ -366,22 +454,83 @@
     </form>
   </div>
 <script>
+// User Profile state (persisted in localStorage)
+let userProfile = {
+  avatar: localStorage.getItem("nutai_user_avatar") || "🥸",
+  nickname: localStorage.getItem("nutai_user_nickname") || "Player"
+};
+// Profile UI Elements
+const profileAvatar = document.getElementById("profile-avatar");
+const profileNickname = document.getElementById("profile-nickname");
+const editNicknameBtn = document.getElementById("edit-nickname");
+const avatarPicker = document.getElementById("avatar-picker");
+const nicknameInput = document.getElementById("nickname-input");
+
+// Display profile
+function updateProfileUI() {
+  profileAvatar.textContent = userProfile.avatar;
+  profileNickname.textContent = userProfile.nickname;
+}
+updateProfileUI();
+
+// Avatar picker handling
+profileAvatar.onclick = () => {
+  avatarPicker.style.display = avatarPicker.style.display === "flex" ? "none" : "flex";
+  avatarPicker.style.flexWrap = "wrap";
+};
+avatarPicker.onclick = e => {
+  if (e.target.tagName === "SPAN") {
+    userProfile.avatar = e.target.textContent;
+    localStorage.setItem("nutai_user_avatar", userProfile.avatar);
+    updateProfileUI();
+    avatarPicker.style.display = "none";
+  }
+};
+// Nickname edit handling
+editNicknameBtn.onclick = () => {
+  nicknameInput.style.display = "inline-block";
+  nicknameInput.value = userProfile.nickname;
+  nicknameInput.focus();
+};
+nicknameInput.onblur = () => {
+  finishNicknameEdit();
+};
+nicknameInput.onkeydown = e => {
+  if (e.key === "Enter") {
+    finishNicknameEdit();
+  }
+};
+function finishNicknameEdit() {
+  let v = nicknameInput.value.trim();
+  if (v) {
+    userProfile.nickname = v;
+    localStorage.setItem("nutai_user_nickname", v);
+  }
+  nicknameInput.style.display = "none";
+  updateProfileUI();
+}
+
+// --- Chatbot logic ---
 const apiKey = "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";
 const apiUrl = "https://openrouter.ai/api/v1/chat/completions";
 const model = "deepseek/deepseek-r1-0528-qwen3-8b:free";
 const siteUrl = window.location.origin;
 const siteTitle = document.title || "Bust A Nut AI";
 
-const USER_AVATAR = "🥸";
-const BOT_AVATAR = "🥜";
+// SYSTEM PROMPT: chill, friendly, "yo" OK, but NO roleplay/actions
+const SYSTEM_PROMPT = `
+You are Bust A Nut AI, a chill, friendly, and skilled male coder and gamer. Use casual, gamer-style language, like "yo", but do not role-play as a human. Do not describe actions, gestures, or emotions (like *laughs*, *leans in*, or *smiles*). Do not pretend to have a body or feelings. Just answer in a helpful, direct, and cool way, as a virtual assistant who talks like a real gamer and coder.
+`;
 
+const BOT_AVATAR = "🥜";
+let messages = [
+  { role: "system", content: SYSTEM_PROMPT }
+];
 const chatHistoryElem = document.getElementById('chat-history');
 const userInputElem = document.getElementById('user-input');
 const inputAreaElem = document.getElementById('input-area');
 const sendBtn = document.getElementById('send-btn');
 const aiThinkingElem = document.getElementById('ai-thinking');
-
-let messages = [];
 
 function appendMessage(role, content, isAnimated = false) {
   const rowDiv = document.createElement('div');
@@ -389,15 +538,26 @@ function appendMessage(role, content, isAnimated = false) {
 
   const avatarDiv = document.createElement('div');
   avatarDiv.className = 'avatar ' + role;
-  avatarDiv.innerHTML = role === 'user' ? USER_AVATAR : BOT_AVATAR;
+  avatarDiv.innerHTML = role === 'user' ? userProfile.avatar : BOT_AVATAR;
 
   const msgDiv = document.createElement('div');
   msgDiv.className = 'msg ' + role;
 
+  // Add nickname for user
+  if (role === 'user') {
+    const nick = document.createElement('span');
+    nick.style.fontSize = "0.92em";
+    nick.style.fontWeight = "bold";
+    nick.style.opacity = "0.8";
+    nick.style.marginRight = "6px";
+    nick.textContent = userProfile.nickname + ":";
+    msgDiv.appendChild(nick);
+  }
+
   if (isAnimated) {
-    msgDiv.innerHTML = "";
+    msgDiv.innerHTML += "";
   } else {
-    msgDiv.innerHTML = renderMarkdownToHtml(content);
+    msgDiv.innerHTML += renderMarkdownToHtml(content, role);
     enhanceCodeBlocks(msgDiv);
   }
 
@@ -419,7 +579,7 @@ function showTypingAnimation() {
   const typingDiv = document.createElement('div');
   typingDiv.className = 'msg bot';
   typingDiv.innerHTML = `
-    <div class="typing" title="AI is typing...">
+    <div class="typing" title="Bust A Nut AI is typing...">
       <span></span><span></span><span></span>
     </div>
   `;
@@ -429,25 +589,23 @@ function showTypingAnimation() {
   chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
   return typingDiv;
 }
-
 function removeTypingAnimation() {
   const typingBubble = chatHistoryElem.querySelector('.typing-bubble');
   if (typingBubble) typingBubble.remove();
 }
-
-function showThinking(message = "AI is thinking...") {
-  aiThinkingElem.innerHTML = `<span class="emoji">💭</span>${message}`;
+function showThinking(message = "Bust A Nut AI is thinking...") {
+  aiThinkingElem.innerHTML = `<span class="emoji">🐿️</span>${message}`;
   aiThinkingElem.style.opacity = "1";
 }
 function showGenerating() {
-  aiThinkingElem.innerHTML = `<span class="emoji">🥜</span>AI is generating a response...`;
+  aiThinkingElem.innerHTML = `<span class="emoji">🥜</span>Bust A Nut AI is generating a response...`;
   aiThinkingElem.style.opacity = "1";
 }
 function hideThinking() {
   aiThinkingElem.innerHTML = "";
   aiThinkingElem.style.opacity = "0";
 }
-function renderMarkdownToHtml(md) {
+function renderMarkdownToHtml(md, role) {
   if (!md) return "";
   md = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   md = md.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
@@ -527,7 +685,7 @@ function typeWriterEffect(element, text, speed = 14, callback) {
   function type() {
     if (i <= text.length) {
       rendered = text.slice(0, i);
-      element.innerHTML = renderMarkdownToHtml(rendered);
+      element.innerHTML = renderMarkdownToHtml(rendered, "bot");
       enhanceCodeBlocks(element);
       chatHistoryElem.scrollTop = chatHistoryElem.scrollHeight;
       i++;
@@ -544,7 +702,7 @@ async function sendMessage(userMessage) {
   userInputElem.value = '';
   messages.push({ role: "user", content: userMessage });
 
-  showThinking("AI is thinking...");
+  showThinking("Bust A Nut AI is thinking...");
   await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
 
   showGenerating();
